@@ -7,7 +7,7 @@
     
     <properties>
       <quarkus-plugin.version>3.20.0</quarkus-plugin.version>
-	  <quarkus.platform.version>3.20.0</quarkus.platform.version>
+	  <quarkus.platform.version>3.28.3</quarkus.platform.version>
       <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
       <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
       <kogito.bom.group-id>com.ibm.bamoe</kogito.bom.group-id>
