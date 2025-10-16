@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${{values.javaGroupId}}</groupId>
+    <artifactId>${{values.javaArtifactId}}</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    
+    <properties>
+      <quarkus-plugin.version>3.20.0</quarkus-plugin.version>
+	  <quarkus.platform.version>3.20.0</quarkus.platform.version>
+      <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+      <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+      <kogito.bom.group-id>com.ibm.bamoe</kogito.bom.group-id>
+      <kogito.bom.artifact-id>bamoe-bom</kogito.bom.artifact-id>
+      <kogito.bom.version>9.2.1-ibm-0005</kogito.bom.version>
+      <version.org.kie.kogito>9.2.1-ibm-0005</version.org.kie.kogito>
+	  <maven.compiler.release>21</maven.compiler.release>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>${kogito.bom.group-id}</groupId>
+                <artifactId>${kogito.bom.artifact-id}</artifactId>
+                <version>${kogito.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ibm.bamoe</groupId>
+            <artifactId>bamoe-ilmt-compliance-quarkus-pamoe</artifactId>
+            <version>9.2.1-ibm-0005</version>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-with-drools-quarkus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-openapi</artifactId>
+        </dependency>
+		
+		{%- if (values.enabledH2Database) or (values.applicationPersistence !== 'Ingen') %}
+		<!-- Enable generic persistance libs-->
+		<dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-addons-quarkus-persistence-jdbc</artifactId>
+        </dependency>
+        {% endif -%}
+		
+        {%- if values.enabledH2Database %}
+        <!-- Enable H2 persistance -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+        </dependency>
+        {% endif -%}
+
+        {%- if values.applicationPersistence == 'Postgresql' %}
+        <!-- Postgres persistanse -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-agroal</artifactId>
+        </dependency>
+        {% endif -%}
+
+        {%- if values.applicationPersistence == 'Kafka' %}
+        <!-- Kafka persistanse -->
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-addons-quarkus-persistence-kafka</artifactId>
+        </dependency>
+        {% endif -%}
+
+        {%- if values.enabledMessaging %}
+        <!-- Kafka Messaging -->
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>kogito-addons-quarkus-messaging</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-reactive-messaging-kafka</artifactId>
+        </dependency>
+        {% endif -%}
+
+       {%- if values.enabledLokObs %}
+        <!-- Lokal Observerbarhet -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-opentelemetry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.micrometer.registry</groupId>
+            <artifactId>quarkus-micrometer-registry-otlp</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        {% endif -%}
+
+        {%- if values.enabledKogitoMetrics %}
+        <!-- Kogito monitoring for prometheus -->
+        <dependency>
+           <groupId>org.kie</groupId>
+           <artifactId>kie-addons-quarkus-monitoring-prometheus</artifactId>
+        </dependency>
+        {% endif -%}
+
+        {%- if values.enabledKogitoTaskManagement %}
+        <dependency>
+           <groupId>org.jbpm</groupId>
+            <artifactId>jbpm-addons-quarkus-task-management</artifactId>
+        </dependency>
+        {% endif -%}
+        
+        {%- if values.enabledKogitoProcessManagement %}
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-addons-quarkus-process-management</artifactId>
+        </dependency>
+        {% endif -%}
+
+        <!-- Test-beroenden -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <skipOriginalJarRename>true</skipOriginalJarRename>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

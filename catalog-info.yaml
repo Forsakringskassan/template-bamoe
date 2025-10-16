@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: ${{values.applicationName | lower}}
+  description: ${{ values.applicationDescription }}
+  annotations:
+    delsystem: ${{ values.delsystemName }}
+spec:
+  type: service
+  lifecycle: experimental
+  owner: ${{ values.owner }}
+  

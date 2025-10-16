@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0  http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <pluginGroups>
+    </pluginGroups>
+
+    <mirrors>
+        <mirror>
+            <id>Nexus</id>
+            <mirrorOf>central</mirrorOf>
+            <name>FK Nexus Public</name>
+            <url>${{values.mavenRepositoryUrl}}</url>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>Nexus-public</id>
+                    <name>FK IT:s Public Repositories</name>
+                    <url>${{values.mavenRepositoryUrl}}</url>
+                    <layout>default</layout>
+                </repository>
+				<repository>
+                    <id>ibm-bamoe-enterprise-maven-repository</id>
+                    <url>${{values.bamoeRepository}}</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                     </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>ibm-bamoe-enterprise-maven-repository</id>
+                    <url>${{values.bamoeRepository}}</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+</settings>
